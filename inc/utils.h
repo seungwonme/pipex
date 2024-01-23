@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,21 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef UTILS_H
+# define UTILS_H
 
-#include <sys/types.h>
-
-enum e_pipe
-{
-	READ_END = 0,
-	WRITE_END = 1
-};
-
-// pipex.c
-void	pipex(int ac, char *av[], char *envp[]);
-void	infile_to_fd(char *av[], char *path[], int fd[2]);
-void	fd_to_outfile(char *av[], char *path[], int fd[2]);
-char	*path_join(char *path[], char *cmd);
+// utils.c
+char	**parse_path(char *envp[]);
+void	free_path(char **path);
+void	protected_pipe(int fd[2]);
+pid_t	protected_fork(void);
+void	protected_dup2(int oldfd, int newfd);
 
 #endif

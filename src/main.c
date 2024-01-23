@@ -16,7 +16,9 @@
 int	main(int ac, char *av[], char *envp[])
 {
 	if (ac < 5)
-		ft_error("Usage: ./pipex [infile] [cmd 1] ... [cmd n] [outfile]\n");
-	pipex(av, envp);
+		ft_error("Usage: ./pipex [infile] [cmd 1] ... [cmd n] [outfile]");
+	if (ft_strncmp(av[1], "here_doc", 9) == 0)
+		
+	pipex(ac, av, envp);
 	return (0);
 }

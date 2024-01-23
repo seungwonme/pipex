@@ -17,7 +17,6 @@
 void	ft_error(char *msg)
 {
 	ft_putstr_fd("\033[0;31m", STDERR_FILENO);
-	ft_putendl_fd("Error", STDERR_FILENO);
 	ft_putstr_fd(msg, STDERR_FILENO);
 	ft_putendl_fd("\033[0m", STDERR_FILENO);
 	exit(EXIT_FAILURE);

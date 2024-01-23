@@ -15,12 +15,16 @@
 #include <fcntl.h>
 #include "libft.h"
 #include "pipex.h"
+#include "utils.h"
 
-void	pipex(char *av[], char *envp[])
+// ./pipex infile cmd cmd outfile 
+// cmd cnt = ac - 3
+void	pipex(int ac, char *av[], char *envp[])
 {
+	(void) ac;
 	char	**path;
-	pid_t	pid[2];
-	int		fd[2];
+	pid_t	pid[ac - 3];
+	int		fd[2][2];
 
 	path = parse_path(envp);
 	protected_pipe(fd);
@@ -30,10 +34,8 @@ void	pipex(char *av[], char *envp[])
 	pid[1] = protected_fork();
 	if (pid[1] == 0)
 		fd_to_outfile(av, path, fd);
-	close(fd[READ_END]);
-	close(fd[WRITE_END]);
-	waitpid(pid[0], NULL, 0);
-	waitpid(pid[1], NULL, 0);
+	waitpid(pid[0], NULLPTR, 0);
+	waitpid(pid[1], NULLPTR, 0);
 	free_path(path);
 }
 
@@ -48,12 +50,12 @@ void	infile_to_fd(char *av[], char *path[], int fd[2])
 		ft_error(av[1]);
 	if (close(fd[READ_END]) < 0)
 		ft_error("close");
-	execve_argv = ft_split(av[2], ' ');
+	execve_argv = ft_split(av[2], ' '. '/');
 	execve_path = path_join(path, execve_argv[0]);
 	protected_dup2(infile, STDIN_FILENO);
 	protected_dup2(fd[WRITE_END], STDOUT_FILENO);
-	if (execve(execve_path, execve_argv, NULL) < 0)
-		ft_error(ft_strjoin(av[2], ": command not found\n"));
+	if (execve(execve_path, execve_argv, NULLPTR) < 0)
+		ft_error(ft_strjoin(av[2], ": command not founds"));
 }
 
 void	fd_to_outfile(char *av[], char *path[], int fd[2])
@@ -67,12 +69,12 @@ void	fd_to_outfile(char *av[], char *path[], int fd[2])
 		ft_error(av[4]);
 	if (close(fd[WRITE_END]) < 0)
 		ft_error("close");
-	execve_argv = ft_split(av[3], ' ');
+	execve_argv = ft_split(av[3], ' ', '/');
 	execve_path = path_join(path, execve_argv[0]);
 	protected_dup2(fd[READ_END], STDIN_FILENO);
 	protected_dup2(outfile, STDOUT_FILENO);
-	if (execve(execve_path, execve_argv, NULL) < 0)
-		ft_error(ft_strjoin(av[3], ": command not found\n"));
+	if (execve(execve_path, execve_argv, NULLPTR) < 0)
+		ft_error(ft_strjoin(av[3], ": command not found"));
 }
 
 char	*path_join(char *path[], char *cmd)
@@ -81,7 +83,7 @@ char	*path_join(char *path[], char *cmd)
 	int		i;
 
 	i = 0;
-	while (path[i] != NULL)
+	while (path != NULLPTR && path[i] != NULLPTR)
 	{
 		tmp = ft_strjoin(path[i], cmd);
 		if (access(tmp, X_OK) == 0)
@@ -89,7 +91,7 @@ char	*path_join(char *path[], char *cmd)
 		free(tmp);
 		++i;
 	}
-	if (path[i] == NULL)
+	if (path[i] == NULLPTR)
 		return (cmd);
 	return (tmp);
 }

@@ -23,19 +23,17 @@ char	**parse_path(char *envp[])
 
 	path = NULLPTR;
 	i = 0;
-	while (envp[i] != NULLPTR)
+	while (envp != NULLPTR && envp[i] != NULLPTR)
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 		{
 			tmp = ft_substr(envp[i], 5, ft_strlen(envp[i]));
-			path = ft_split(tmp, ':');
+			path = ft_split(tmp, ':', '\0');
 			free(tmp);
 			break ;
 		}
 		++i;
 	}
-	if (path == NULLPTR)
-		ft_error("PATH not found\n");
 	return (path);
 }
 
@@ -73,3 +71,31 @@ void	protected_dup2(int oldfd, int newfd)
 	if (dup2(oldfd, newfd) < 0)
 		ft_error("dup2");
 }
+
+/* 
+1. 
+pipe(fd[0])
+fork()
+close(fd[0][WRITE_END])
+
+2. 
+pipe(fd[1])
+fork()
+close(fd[0][WRITE_END])
+
+3.
+close(fd[0][READ_END])
+pipe(fd[0])
+fork()
+close(fd[0][WRITE_END])
+
+1.
+close(fd[0][READ_END])
+dup2(infile, STDIN_FILENO)
+dup2(fd[0][WRITE_END], STDOUT_FILENO)
+
+2.
+close(fd[1][READ_END])
+dup2(fd[0][READ_END], STDIN_FILENO)
+dup2(fd[1][WRITE_END], STDOUT_FILENO)
+ */

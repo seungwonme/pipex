@@ -19,27 +19,87 @@
 
 // ./pipex infile cmd cmd outfile 
 // cmd cnt = ac - 3
-void	pipex(int ac, char *av[], char *envp[])
-{
-	(void) ac;
-	char	**path;
-	pid_t	pid[ac - 3];
-	int		fd[2][2];
 
-	path = parse_path(envp);
-	protected_pipe(fd);
-	pid[0] = protected_fork();
-	if (pid[0] == 0)
-		infile_to_fd(av, path, fd);
-	pid[1] = protected_fork();
-	if (pid[1] == 0)
-		fd_to_outfile(av, path, fd);
-	waitpid(pid[0], NULLPTR, 0);
-	waitpid(pid[1], NULLPTR, 0);
-	free_path(path);
+void	init_info(int ac, char *av[], char *envp[])
+{
+	info.ac = ac;
+	info.av = av;
+	info.path = parse_path(envp);
+	info.pid = (pid_t *)malloc(sizeof(pid_t) * (ac - 3));
+	protected_pipe(info.fd[0]);
+	protected_pipe(info.fd[1]);
 }
 
-void	infile_to_fd(char *av[], char *path[], int fd[2])
+void	redirect_io(t_info* info, int i)
+{
+	if (i == 0)
+		infile_to_pipe(info->av, info->path, info->fd[0]);
+	else if (i == info->ac - 4)
+		pipe_to_outfile(info->av, info->path, info->fd[1]);
+	else
+	{
+		// 중간 명령어 실행
+	}
+}
+
+void	execute_cmd(t_info* info, int i)
+{
+	char	**execve_argv;
+	char	*execve_path;
+
+	info->pid[i] = protected_fork();
+	if (info->pid[i] == 0)
+	{
+		execve_argv = ft_split(av[2], ' ', '/');
+		execve_path = path_join(path, execve_argv[0]);
+		redirect_io(info, i);
+		if (execve(execve_path, execve_argv, NULL) < 0)
+		{
+			ft_putstr("\033[0;31mpipex: av[3]: ");
+			ft_error(ft_strjoin(av[3], ": command not found"));
+		}
+	}
+}
+
+void	pipex(int ac, char *av[], char *envp[])
+{
+	t_info	info;
+	int		i;
+
+	init_info(ac, av, envp);
+	i = 0;
+	while (i < ac - 3)
+	{
+		execute_cmd(&info, i);
+		++i;
+	}
+	// free_info(&info);
+}
+
+/* 
+상황에 맞는 fd로 dup2를 통해 입력 흐름 제어하는 함수 (자식 프로세스)
+ */
+
+char	*path_join(char *path[], char *cmd)
+{
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	while (path != NULL && path[i] != NULL)
+	{
+		tmp = ft_strjoin(path[i], cmd);
+		if (access(tmp, X_OK) == 0)
+			break ;
+		free(tmp);
+		++i;
+	}
+	if (path == NULL || path[i] == NULL)
+		return (cmd);
+	return (tmp);
+}
+
+void	infile_to_pipe(char *av[], char *path[], int fd[2])
 {
 	int		infile;
 	char	**execve_argv;
@@ -54,11 +114,11 @@ void	infile_to_fd(char *av[], char *path[], int fd[2])
 	execve_path = path_join(path, execve_argv[0]);
 	protected_dup2(infile, STDIN_FILENO);
 	protected_dup2(fd[WRITE_END], STDOUT_FILENO);
-	if (execve(execve_path, execve_argv, NULLPTR) < 0)
+	if (execve(execve_path, execve_argv, NULL) < 0)
 		ft_error(ft_strjoin(av[2], ": command not founds"));
 }
 
-void	fd_to_outfile(char *av[], char *path[], int fd[2])
+void	pipe_to_outfile(char *av[], char *path[], int fd[2])
 {
 	int		outfile;
 	char	**execve_argv;
@@ -73,25 +133,6 @@ void	fd_to_outfile(char *av[], char *path[], int fd[2])
 	execve_path = path_join(path, execve_argv[0]);
 	protected_dup2(fd[READ_END], STDIN_FILENO);
 	protected_dup2(outfile, STDOUT_FILENO);
-	if (execve(execve_path, execve_argv, NULLPTR) < 0)
+	if (execve(execve_path, execve_argv, NULL) < 0)
 		ft_error(ft_strjoin(av[3], ": command not found"));
-}
-
-char	*path_join(char *path[], char *cmd)
-{
-	char	*tmp;
-	int		i;
-
-	i = 0;
-	while (path != NULLPTR && path[i] != NULLPTR)
-	{
-		tmp = ft_strjoin(path[i], cmd);
-		if (access(tmp, X_OK) == 0)
-			break ;
-		free(tmp);
-		++i;
-	}
-	if (path[i] == NULLPTR)
-		return (cmd);
-	return (tmp);
 }

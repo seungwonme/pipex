@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seunan <seunan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,15 +10,4 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "pipex.h" 
-// #include "heredoc.h"
-
-int	main(int ac, char *av[], char *envp[])
-{
-	if (ac < 5)
-		ft_error("Usage: ./pipex [infile] [cmd 1] ... [cmd n] [outfile]");
-	else
-		pipex(ac, av, envp);
-	return (0);
-}
+#include "heredoc.h"

@@ -22,7 +22,8 @@ SRC_DIR := ./src
 SRC    := \
 		main.c \
 		pipex.c \
-		utils.c 
+		utils.c \
+		heredoc.c
 OBJ    := $(addprefix $(SRC_DIR)/, $(SRC:.c=.o))
 
 LIBFT  := ./libft/libft.a

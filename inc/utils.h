@@ -13,6 +13,8 @@
 #ifndef UTILS_H
 # define UTILS_H
 
+#include <sys/types.h>
+
 // utils.c
 char	**parse_path(char *envp[]);
 void	free_path(char **path);

@@ -15,6 +15,18 @@
 
 #include <sys/types.h>
 
+typedef struct s_info	t_info;
+typedef enum e_pipe		t_pipe;
+
+struct s_info
+{
+	int		ac;
+	char	**av;
+	char	**path;
+	pid_t	*pid;
+	int		fd[2][2];
+};
+
 enum e_pipe
 {
 	READ_END = 0,

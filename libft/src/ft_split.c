@@ -43,7 +43,7 @@ static int	get_cnt(char const *s, char c)
 	return (cnt);
 }
 
-static char	*str_maker(const char *s, int *sidx, char c, char suffix)
+static char	*str_maker(const char *s, int *sidx, char c)
 {
 	char	*str;
 	int		strlen;
@@ -56,7 +56,7 @@ static char	*str_maker(const char *s, int *sidx, char c, char suffix)
 		++strlen;
 		++*sidx;
 	}
-	str = (char *) ft_calloc(sizeof(char), (strlen + 1 + (suffix != '\0')));
+	str = (char *) ft_calloc(sizeof(char), (strlen + 1));
 	if (!str)
 		return (NULL);
 	*sidx -= strlen;
@@ -67,11 +67,10 @@ static char	*str_maker(const char *s, int *sidx, char c, char suffix)
 		++*sidx;
 		++strlen;
 	}
-	str[strlen] = suffix;
 	return (str);
 }
 
-char	**ft_split(char const *s, char c, char suffix)
+char	**ft_split(char const *s, char c)
 {
 	char	**out;
 	char	*str;
@@ -87,7 +86,7 @@ char	**ft_split(char const *s, char c, char suffix)
 	i = 0;
 	while (i < cnt)
 	{
-		str = str_maker(s, &sidx, c, suffix);
+		str = str_maker(s, &sidx, c);
 		if (!str)
 			return (str_free(out, i));
 		out[i] = str;

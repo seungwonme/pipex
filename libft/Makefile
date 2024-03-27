@@ -79,7 +79,6 @@ $(NAME): $(OBJ)
 
 bonus:
 	@$(MAKE) 'OBJ=$(OBJ) $(BONUS_OBJ)' all
-	@echo "$(GREEN)Bonus part compiled successfully$(RESET)"
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE)

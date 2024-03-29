@@ -15,10 +15,10 @@
 #include <unistd.h>
 #include "libft.h"
 
-void	ft_error(char *msg)
+void	ft_error(const char* msg)
 {
 	ft_putstr_fd("\033[0;31m", STDERR_FILENO);
-	ft_putendl_fd("Error", STDERR_FILENO);
+	ft_putstr_fd("Pipex: ", STDERR_FILENO);
 	perror(msg);
 	ft_putstr_fd("\033[0m", STDERR_FILENO);
 	exit(EXIT_FAILURE);

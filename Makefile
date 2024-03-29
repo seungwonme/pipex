@@ -32,6 +32,9 @@ LIBFT   := ./libft/libft.a
 all: $(NAME)
 	@echo "$(GREEN)$(NAME) created successfully$(RESET)"
 
+bonus: $(NAME)
+	@echo "$(GREEN)Bonus part compiled successfully$(RESET)"
+
 $(NAME): $(LIBFT) $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LIBFT)
 	@echo "$(WHITE)Creating $@$(RESET)"
@@ -70,4 +73,4 @@ lldb:
 	@$(MAKE) all CFLAGS="$(LLDB)"
 	@echo "$(YELLOW)Executable compiled to enable LLDB debugging$(RESET)"
 
-.PHONY: all clean fclean re mem lldb
+.PHONY: all clean fclean re mem lldb bonus

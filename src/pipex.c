@@ -35,7 +35,6 @@ void	pipex(t_vars* vars)
 
 void	infile_to_pipe(t_vars* vars)
 {
-	int		infile;
 	pid_t	pid;
 	char**	cmd_argv;
 
@@ -44,14 +43,17 @@ void	infile_to_pipe(t_vars* vars)
 	if (pid == 0)
 	{
 		close(vars->fd[READ_END]);
-		infile = safe_open(vars->argv[1], O_RDONLY, 0644);
-		safe_dup2(infile, STDIN_FILENO);
+		if (vars->infile == 0)
+			vars->infile = safe_open(vars->argv[1], O_RDONLY, 0644);
+		safe_dup2(vars->infile, STDIN_FILENO);
 		safe_dup2(vars->fd[WRITE_END], STDOUT_FILENO);
 		cmd_argv = ft_split(vars->argv[2], ' ', '\0');
 		*cmd_argv = find_executable_path(vars->path, *cmd_argv);
 		if (execve(*cmd_argv, cmd_argv, NULL) == -1)
-			ft_error("Failed to execute command");
+			ft_error(*cmd_argv);
 	}
+	if (vars->infile != 0)
+		safe_close(vars->infile);
 	safe_close(vars->fd[WRITE_END]);
 }
 
@@ -72,7 +74,7 @@ void	pipe_to_pipe(t_vars* vars, int i)
 		cmd_argv = ft_split(vars->argv[2 + i], ' ', '\0');
 		*cmd_argv = find_executable_path(vars->path, *cmd_argv);
 		if (execve(*cmd_argv, cmd_argv, NULL) == -1)
-			ft_error("Failed to execute command");
+			ft_error(*cmd_argv);
 	}
 	safe_close(vars->fd[WRITE_END]);
 	safe_close(prev_fd);
@@ -87,13 +89,18 @@ void	pipe_to_outfile(t_vars* vars)
 	pid = safe_fork();
 	if (pid == 0)
 	{
-		outfile = safe_open(vars->argv[vars->argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (vars->infile == 0)
+			outfile = safe_open(vars->argv[vars->argc - 1], \
+			O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else
+			outfile = safe_open(vars->argv[vars->argc - 1], \
+			O_WRONLY | O_CREAT | O_APPEND, 0644);
 		safe_dup2(vars->fd[READ_END], STDIN_FILENO);
 		safe_dup2(outfile, STDOUT_FILENO);
 		cmd_argv = ft_split(vars->argv[vars->argc - 2], ' ', '\0');
 		*cmd_argv = find_executable_path(vars->path, *cmd_argv);
 		if (execve(*cmd_argv, cmd_argv, NULL) == -1)
-			ft_error("Failed to execute command");
+			ft_error(*cmd_argv);
 	}
 	safe_close(vars->fd[READ_END]);
 }

@@ -10,7 +10,7 @@ int	safe_open(const char *pathname, int flags, mode_t mode)
 	fd = open(pathname, flags, mode);
 	if (fd == -1)
 	{
-		ft_error("Failed to open file");
+		ft_error(pathname);
 	}
 	return (fd);
 }

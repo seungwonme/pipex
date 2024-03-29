@@ -20,4 +20,7 @@ time ./pipex infile "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" 
 ulimit -a
 ulimit -u 400; ./pipex infile "ls -l" cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat "grep -v pipex" outfile
 ulimit -n 10; ./pipex infile "ls -l" cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat "grep -v pipex" outfile
+
+# here_doc 테스트
+./pipex here_doc limiter cat cat outfile
 ```

@@ -12,6 +12,7 @@ typedef struct s_vars
 	char**	path; // NULL or PATH
 	char**	argv;
 	int		argc;
+	int		infile;
 	int		fd[2];
 } t_vars;
 

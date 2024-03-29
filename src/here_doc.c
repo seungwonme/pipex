@@ -15,7 +15,13 @@ void	here_doc(t_vars* vars)
 
 	here_doc = init_here_doc(vars);
 	read_input(&here_doc);
+	safe_close(here_doc.tmp_fd);
+	vars->infile = safe_open(here_doc.tmp_file, O_RDONLY, 0644);
+	++vars->argv;
+	--vars->argc;
+	pipex(vars);
 	unlink(here_doc.tmp_file);
+	free(here_doc.tmp_file);
 }
 
 t_here_doc	init_here_doc(t_vars* vars)
@@ -24,22 +30,27 @@ t_here_doc	init_here_doc(t_vars* vars)
 
 	here_doc.limiter = vars->argv[2];
 	here_doc.tmp_file = get_tmp_file("/tmp/pipex_tmp_");
-	here_doc.tmp_fd = safe_open(here_doc.tmp_file, O_CREAT | O_RDWR, 0644);
+	here_doc.tmp_fd = safe_open(here_doc.tmp_file, O_CREAT | O_WRONLY, 0644);
 	return (here_doc);
 }
 
 char*	get_tmp_file(const char* tmp_dir)
 {
 	char*	tmp_file;
+	char*	num;
 	int		i;
 
 	i = 0;
-	tmp_file = ft_strjoin(tmp_dir, ft_itoa(i++));
+	num = ft_itoa(i++);
+	tmp_file = ft_strjoin(tmp_dir, num);
 	while (access(tmp_file, F_OK) == 0)
 	{
+		free(num);
 		free(tmp_file);
-		tmp_file = ft_strjoin(tmp_dir, ft_itoa(i++));
+		num = ft_itoa(i++);
+		tmp_file = ft_strjoin(tmp_dir, num);
 	}
+	free(num);
 	return (tmp_file);
 }
 

@@ -46,6 +46,7 @@ t_vars	init_vars(int argc, char *argv[], char *envp[])
 	vars.path = get_path(envp);
 	vars.argv = argv;
 	vars.argc = argc;
+	vars.infile = 0;
 	return (vars);
 }
 

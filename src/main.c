@@ -5,7 +5,6 @@
 #include "utils.h"
 
 // TEST
-#include <stdio.h>
 #include <stdlib.h>
 // export MallocStackLogging=1 when you're finished unset MallocStackLogging.
 // To view detailed information about leaks, use the gcc -g option.
@@ -18,7 +17,7 @@ void	leak(void)
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	// atexit(leak);
+	atexit(leak);
 	t_vars vars;
 
 	if (argc < 5)

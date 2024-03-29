@@ -18,13 +18,13 @@ void	leak(void)
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	atexit(leak);
+	// atexit(leak);
 	t_vars vars;
 
 	if (argc < 5)
 		invalid_args();
 	vars = init_vars(argc, argv, envp);
-	if (ft_strncmp(vars.argv[2], "here_doc", 9) == 0)
+	if (ft_strncmp(vars.argv[1], "here_doc", 9) == 0)
 		here_doc(&vars);
 	else
 		pipex(&vars);

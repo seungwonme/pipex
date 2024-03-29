@@ -30,6 +30,26 @@ typedef struct s_list	t_list;
 #  define NULLPTR (void *)0
 # endif
 
+# ifndef STDIN
+#  define STDIN 0
+# endif
+
+# ifndef STDOUT
+#  define STDOUT 1
+# endif
+
+# ifndef STDERR
+#  define STDERR 2
+# endif
+
+# ifndef SUCCESS
+#  define SUCCESS 0
+# endif
+
+# ifndef FAILURE
+#  define FAILURE 1
+# endif
+
 enum e_bool
 {
 	FALSE = 0,
@@ -68,7 +88,7 @@ char	*ft_strdup(const char *s1);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
-char	**ft_split(char const *s, char c);
+char	**ft_split(char const *s, char c, char suffix);
 char	*ft_itoa(int n);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));

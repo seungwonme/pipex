@@ -1,24 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seunan <seunan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/30 18:41:01 by seunan            #+#    #+#             */
+/*   Updated: 2024/03/30 18:42:13 by seunan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "here_doc.h"
 #include "libft.h"
 #include "pipex.h"
 #include "safe_syscalls.h"
 #include "utils.h"
-
-// TEST
 #include <stdlib.h>
-// export MallocStackLogging=1 when you're finished unset MallocStackLogging.
-// To view detailed information about leaks, use the gcc -g option.
-// while true; do leaks a.out; sleep 1; done;
-void	leak(void)
+
+/* void	leak(void)
 {
 	system("leaks --list pipex");
-}
-// TEST
+	atexit(leak);
+} */
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	atexit(leak);
-	t_vars vars;
+	t_vars	vars;
 
 	if (argc < 5)
 		invalid_args();
@@ -28,5 +35,5 @@ int	main(int argc, char *argv[], char *envp[])
 	else
 		pipex(&vars);
 	free_path(vars.path);
-	return 0;
+	return (0);
 }

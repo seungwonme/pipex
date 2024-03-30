@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seunan <seunan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/30 18:46:43 by seunan            #+#    #+#             */
+/*   Updated: 2024/03/30 18:48:52 by seunan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include <unistd.h>
 #include "libft.h"
 #include "utils.h"
 
-void	free_path(char** path)
+void	free_path(char **path)
 {
 	int	i;
 
 	if (!path)
-		return;
+		return ;
 	i = 0;
 	while (path[i])
 	{
@@ -26,22 +38,22 @@ void	invalid_args(void)
 	exit(FAILURE);
 }
 
-char**	get_path(char *envp[])
+char	**get_path(char *envp[])
 {
 	if (!envp)
-		return NULL;
+		return (NULL);
 	while (*envp)
 	{
 		if (ft_strncmp(*envp, "PATH=", 5) == 0)
-			return (char**)ft_split(*envp + 5, ':', '/');
+			return ((char **)ft_split(*envp + 5, ':', '/'));
 		++envp;
 	}
-	return NULL;
+	return (NULL);
 }
 
 t_vars	init_vars(int argc, char *argv[], char *envp[])
 {
-	t_vars vars;
+	t_vars	vars;
 
 	vars.path = get_path(envp);
 	vars.argv = argv;
@@ -50,22 +62,22 @@ t_vars	init_vars(int argc, char *argv[], char *envp[])
 	return (vars);
 }
 
-char*	find_executable_path(char** path, char* cmd)
+char	*find_executable_path(char **path, char *cmd)
 {
-	char*	path_cmd;
+	char	*path_cmd;
 
 	if (!path)
-		return cmd;
+		return (cmd);
 	while (*path)
 	{
 		path_cmd = ft_strjoin(*path, cmd);
 		if (access(path_cmd, X_OK) == 0)
 		{
 			free(cmd);
-			return path_cmd;
+			return (path_cmd);
 		}
 		free(path_cmd);
 		++path;
 	}
-	return cmd;
+	return (cmd);
 }

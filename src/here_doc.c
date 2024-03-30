@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seunan <seunan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/30 18:42:40 by seunan            #+#    #+#             */
+/*   Updated: 2024/03/30 18:43:44 by seunan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -5,11 +17,11 @@
 #include "here_doc.h"
 #include "safe_syscalls.h"
 
-static char*		get_tmp_file(const char* tmp_dir);
-static t_here_doc	init_here_doc(t_vars* vars);
-static void			read_input(t_here_doc* here_doc);
+static char			*get_tmp_file(const char *tmp_dir);
+static t_here_doc	init_here_doc(t_vars *vars);
+static void			read_input(t_here_doc *here_doc);
 
-void	here_doc(t_vars* vars)
+void	here_doc(t_vars *vars)
 {
 	t_here_doc	here_doc;
 
@@ -24,7 +36,7 @@ void	here_doc(t_vars* vars)
 	free(here_doc.tmp_file);
 }
 
-t_here_doc	init_here_doc(t_vars* vars)
+t_here_doc	init_here_doc(t_vars *vars)
 {
 	t_here_doc	here_doc;
 
@@ -34,10 +46,10 @@ t_here_doc	init_here_doc(t_vars* vars)
 	return (here_doc);
 }
 
-char*	get_tmp_file(const char* tmp_dir)
+char	*get_tmp_file(const char *tmp_dir)
 {
-	char*	tmp_file;
-	char*	num;
+	char	*tmp_file;
+	char	*num;
 	int		i;
 
 	i = 0;
@@ -54,9 +66,9 @@ char*	get_tmp_file(const char* tmp_dir)
 	return (tmp_file);
 }
 
-void	read_input(t_here_doc* here_doc)
+void	read_input(t_here_doc *here_doc)
 {
-	char*	buf;
+	char	*buf;
 	int		buf_len;
 	int		read_cnt;
 
@@ -69,7 +81,8 @@ void	read_input(t_here_doc* here_doc)
 		++read_cnt;
 		if (ft_strchr(buf, '\n'))
 		{
-			if (ft_strncmp(buf, here_doc->limiter, buf_len) == 0 && read_cnt == 1)
+			if (ft_strncmp(buf, here_doc->limiter, buf_len) == 0 \
+				&& read_cnt == 1)
 				break ;
 			read_cnt = 0;
 			ft_putstr_fd("> ", 1);

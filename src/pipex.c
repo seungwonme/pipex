@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seunan <seunan@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/30 18:45:49 by seunan            #+#    #+#             */
+/*   Updated: 2024/03/30 18:46:25 by seunan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -6,11 +18,11 @@
 #include "safe_syscalls.h"
 #include "utils.h"
 
-static void	infile_to_pipe(t_vars* vars);
-static void	pipe_to_pipe(t_vars* vars, int i);
-static void	pipe_to_outfile(t_vars* vars);
+static void	infile_to_pipe(t_vars *vars);
+static void	pipe_to_pipe(t_vars *vars, int i);
+static void	pipe_to_outfile(t_vars *vars);
 
-void	pipex(t_vars* vars)
+void	pipex(t_vars *vars)
 {
 	int	i;
 
@@ -33,10 +45,10 @@ void	pipex(t_vars* vars)
 	}
 }
 
-void	infile_to_pipe(t_vars* vars)
+void	infile_to_pipe(t_vars *vars)
 {
 	pid_t	pid;
-	char**	cmd_argv;
+	char	**cmd_argv;
 
 	safe_pipe(vars->fd);
 	pid = safe_fork();
@@ -57,11 +69,11 @@ void	infile_to_pipe(t_vars* vars)
 	safe_close(vars->fd[WRITE_END]);
 }
 
-void	pipe_to_pipe(t_vars* vars, int i)
+void	pipe_to_pipe(t_vars *vars, int i)
 {
 	int		prev_fd;
 	pid_t	pid;
-	char**	cmd_argv;
+	char	**cmd_argv;
 
 	prev_fd = vars->fd[READ_END];
 	safe_pipe(vars->fd);
@@ -80,11 +92,11 @@ void	pipe_to_pipe(t_vars* vars, int i)
 	safe_close(prev_fd);
 }
 
-void	pipe_to_outfile(t_vars* vars)
+void	pipe_to_outfile(t_vars *vars)
 {
 	int		outfile;
 	pid_t	pid;
-	char**	cmd_argv;
+	char	**cmd_argv;
 
 	pid = safe_fork();
 	if (pid == 0)

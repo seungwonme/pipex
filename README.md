@@ -17,7 +17,7 @@ The `pipex` program is designed to take two commands as arguments and execute th
 git clone https://github.com/seungwonme/pipex.git
 ```
 
-2. sNavigate to the project directory:
+2. Navigate to the project directory:
 ```bash
 cd pipex
 ```
@@ -29,12 +29,18 @@ make
 
 4. Run the program with the desired command-line arguments:
 ```bash
-./pipex file1 "cmd1" "cmd2" file2
+./pipex infile cmd1 cmd2 ... cmdn outfile
+# It will execute the following command:
+< infile cmd1 | cmd2 | ... | cmdn > outfile
+
+./pipex here_doc <limiter> cmd1 cmd2 ... cmdn outfile
+# It will execute the following command:
+<< <limiter> cmd1 | cmd2 | ... | cmdn > outfile
 ```
 
 Example:
 ```bash
-./pipex infile "ls -l" "grep pipex" outfile
+./pipex infile "ls -l" "cat -e" "grep pipex" outfile
 ```
 
 - To clean up object files:

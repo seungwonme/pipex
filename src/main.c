@@ -15,13 +15,6 @@
 #include "pipex.h"
 #include "safe_syscalls.h"
 #include "utils.h"
-#include <stdlib.h>
-
-/* void	leak(void)
-{
-	system("leaks --list pipex");
-	atexit(leak);
-} */
 
 int	main(int argc, char *argv[], char *envp[])
 {

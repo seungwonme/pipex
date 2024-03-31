@@ -6,6 +6,8 @@
 time ./pipex infile "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" "sleep 1" outfile
 
 # open 에러 테스트
+touch infile outfile permission_denied && chmod 000 permission_denied
+
 ./pipex permission_denied "ls -l" "grep pipex" outfile
 ./pipex permission_denied "ls -l" cat cat "grep pipex" outfile
 ./pipex infile "ls -l" "grep pipex" permission_denied
@@ -23,4 +25,14 @@ ulimit -n 10; ./pipex infile "ls -l" cat cat cat cat cat cat cat cat cat cat cat
 
 # here_doc 테스트
 ./pipex here_doc limiter cat cat outfile
+
+# /dev/random
+./pipex /dev/random "head -c 100" "wc -c" outfile
+
+# zombie process 테스트
+./pipex infile ls "sleep 5" ls "sleep 5" ls "sleep 5" ls "sleep 5" ls "sleep 5" outfile
+ps
+
+# unset PATH 테스트
+unset PATH; ./pipex infile "ls -l" cat outfile
 ```
